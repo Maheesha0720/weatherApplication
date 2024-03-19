@@ -45,7 +45,7 @@ async function CheckWeather(city) {
   weatherIconDiv.appendChild(imgElement);
   
   const lati=data.location.lat;
-  const lond=data.location.lon;
+  const long=data.location.lon;
 
   initializeMap(lati,long);
 }
