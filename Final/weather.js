@@ -2,6 +2,75 @@ const apiKey = "f53ad20101434261a2750426241203";
 const apiUrl = "http://api.weatherapi.com/v1/current.json?";
 const search = document.getElementById("search-input");
 const searchBtn = document.getElementById("search-button");
+const imgElement = document.createElement('img');
+
+
+//-------------------------------------------------------------------------
+if (navigator.geolocation) {
+  navigator.geolocation.getCurrentPosition(successCallback, errorCallback);
+} else {
+  alert("Geolocation is not supported by this browser.");
+}
+
+function successCallback(position) {
+  const latitude = position.coords.latitude;
+  const longitude = position.coords.longitude;
+  
+  console.log("Latitude:", latitude, "Longitude:", longitude);
+  getCityName(latitude, longitude);  
+}
+
+function errorCallback(error) {
+  console.error("Error getting location: ", error);
+}
+
+//-------------------------
+
+function getCityName(lat, lon) {
+
+  const url = `http://api.weatherapi.com/v1/current.json?key=${apiKey}&q=${lat},${lon}`;
+
+  fetch(url)
+    .then(response => response.json())
+    .then(data => {
+      const city = data.location.name;  // Get the city name from the location object
+      console.log("City:", city);
+      document.getElementById("location").innerHTML = city;
+      document.getElementById("temp").innerHTML = data.current.temp_c + "°C";
+      document.getElementById("temper").innerHTML = data.current.temp_c + "°C";
+      document.getElementById("Humidity").innerHTML = data.current.humidity;
+      document.getElementById("wind").innerHTML = data.current.wind_kph + "km/h";
+      document.getElementById("lon").innerHTML = data.location.lon + "°";
+      document.getElementById("lat").innerHTML = data.location.lat + "°";
+      document.getElementById("country").innerHTML = data.location.country;
+      document.getElementById("feel").innerHTML = data.current.feelslike_c + "°C";
+      document.getElementById("cond").innerHTML = data.current.vis_km + "km";
+      document.getElementById("loc").innerHTML = data.location.name;
+      document.getElementById("con").innerHTML = data.current.condition.text;
+      document.getElementById("condition").innerHTML = data.current.condition.text;
+      
+      
+      imgElement.src = data.current.condition.icon;
+      imgElement.style.width = '128px';
+      imgElement.style.height = '128px';
+      imgElement.style.marginTop = '20px';
+      const weatherIconDiv = document.getElementById("img");
+      weatherIconDiv.innerHTML='';
+      weatherIconDiv.appendChild(imgElement);
+
+      initializeMap(lat,lon);
+      lastWeek(city);
+      nextDays(city);
+    })
+
+    
+    .catch(error => console.error("Error fetching data from WeatherAPI:", error));
+}
+
+
+//-------------------------------------------------------------------------------
+
+
 
 
 searchBtn.addEventListener("click",()=>{
@@ -10,14 +79,13 @@ searchBtn.addEventListener("click",()=>{
  })
 
 
-//const city=search;
+
 async function CheckWeather(city) {
- // console.log(city);
+ 
   const response = await fetch(apiUrl + `key=${apiKey}`+ `&q=${city}`);
   var data = await response.json();
 
   console.log(data);
-//console.log(document.getElementById("search-input").value);
 
 
 
@@ -35,7 +103,7 @@ async function CheckWeather(city) {
   document.getElementById("con").innerHTML = data.current.condition.text;
   document.getElementById("condition").innerHTML = data.current.condition.text;
   
-  const imgElement = document.createElement('img');
+  
   imgElement.src = data.current.condition.icon;
   imgElement.style.width = '128px';
   imgElement.style.height = '128px';
