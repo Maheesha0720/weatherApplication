@@ -71,10 +71,10 @@ body {
 
 #card {
     border: 3px solid;
-
+    
     border-color: #81ccf74f;
     border-radius: 50px;
-    margin: 4%;
+    margin: 5%;
     /*font-family: 'Times New Roman';*/
     margin-right: 5%;
     width: 90%;
@@ -122,6 +122,9 @@ body {
     border-radius: 25px;
     width: 90%;
     background-color: #6bb5f138;
+}
+.card-body{
+    padding-top: 0px !important;
 }
 
 #table1 {
